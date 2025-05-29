@@ -1,0 +1,60 @@
+Kind installation : curl -Lo ./kind https://kind.sigs.k8s.io/dl/v0.29.0/kind-linux-amd64 (get the binary distribution)
+
+Helm installation : curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3  
+
+PS SQL installation:
+
+
+Dependencies : Java 21 , Spring Web , Spring Data JPA, Postgr SQL driver, Spring Boot Actuator, Lombok,  Prometheus Developer
+
+
+
+/*****  Execution to handle failover *****/
+#!/usr/bin/env bash
+set -uo pipefail  # Omit `-e`
+
+run_step() {
+  echo "Running $1"
+  if $1; then
+    echo "$1 succeeded"
+  else
+    echo  "$1 failed"
+  fi
+}
+
+cd "$(dirname "$0")"
+
+run_step "../config/kind/deploy.sh"
+sleep 5
+run_step "../config/ingress/deploy.sh"
+sleep 5
+run_step "../config/monitoring/deploy.sh"
+sleep 5
+run_step "../config/postgres/deploy.sh"
+sleep 60
+run_step "./populate-db.sh"
+
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: localdb-nodeport
+  namespace: postgres
+spec:
+  type: NodePort
+  selector:
+    cnpg.io/cluster: localdb
+    role: primary
+  ports:
+    - port: 5432
+      targetPort: 5432
+      nodePort: 30007
+
+psql -h localhost -p 6543 -U localuser localdb
+
+
+
+
+
+

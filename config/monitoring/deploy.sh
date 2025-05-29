@@ -7,5 +7,5 @@ if ! helm repo list | grep -q 'https://prometheus-community.github.io/helm-chart
 fi
 
 helm upgrade --install kind-prometheus prometheus-community/kube-prometheus-stack \
-      --namespace monitoring --create-namespace \
+      --namespace monitoring --create-namespace --set prometheus.prometheusSpec.maximumStartupDurationSeconds=300 \
       -f config.yaml

@@ -1,23 +1,40 @@
 #!/usr/bin/env bash
-set -euo pipefail
+#set -euo pipefail
+
+set -uo pipefail  # Omit `-e`
+
+run_step() {
+  echo "Running $1"
+  if $1; then
+    echo "$1 succeeded"
+  else
+    echo  "$1 failed"
+  fi
+}
 
 cd "$(dirname "$0")"
 
 echo "Installing kind"
-../config/kind/deploy.sh
-echo "Waiting for state stabalization"
+run_step ../config/kind/deploy.sh
+echo "Waiting for state stabalization for kind"
 sleep 5
+
 echo "Installing ingress"
-../config/ingress/deploy.sh
-echo "Waiting for state stabalization"
+run_step ../config/ingress/deploy.sh
+echo "Waiting for state stabalization for ingress"
 sleep 5
+
 echo "Installing monitoring"
-../config/monitoring/deploy.sh
-echo "Waiting for state stabalization"
+run_step ../config/monitoring/deploy.sh
+echo "Waiting for state stabalization for monitoring"
 sleep 5
+
 echo "Installing postgres"
-../config/postgres/deploy.sh
+run_step ../config/postgres/deploy.sh
+echo "Waiting for state stabalization for postgres"
 sleep 60
 
+echo "Installing populate_db"
 ./populate-db.sh
+echo "Populate db script executed"
 

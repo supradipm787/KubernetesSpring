@@ -8,4 +8,5 @@ export PGUSER=$(kubectl get secrets/localdb-secret -n postgres --template={{.dat
 export PGHOST=localhost
 export PGDATABASE=localdb
 
+echo "In populate-db.sh script post export of PGDatabase"
 psql -a -f ../dat/data.sql
