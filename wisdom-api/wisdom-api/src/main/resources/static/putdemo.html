@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>PUT Demo</title>
+</head>
+
+<body>
+  <script>
+    // Replace with a valid UUID and vendor JSON payload
+    const vendorId = "550e8400-e29b-41d4-a716-446655440000";
+    const url = `http://localhost:8080/wisdom/vendors/vendor/${vendorId}`;
+
+    // Example JSON payload to update a vendor
+    const payload = {
+      "vendorId": vendorId,
+      "name": "Acme Supplies Ltd",
+      "email": "acme@example.com",
+      "address": "123 Main Street",
+      
+    };
+
+    fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+      .then((resp) => {
+        if (!resp.ok) {
+          throw new Error(`Server returned ${resp.status} ${resp.statusText}`);
+        }
+        return resp.json();
+      })
+      .then((updatedVendor) => {
+        console.log("Vendor updated successfully:", updatedVendor);
+      })
+      .catch((err) => {
+        console.error("Error during PUT:", err);
+      });
+  </script>
+</body>
+
+</html>
