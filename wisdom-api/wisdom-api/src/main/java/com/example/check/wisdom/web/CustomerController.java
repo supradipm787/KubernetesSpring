@@ -3,6 +3,7 @@ package com.example.check.wisdom.web;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.util.StringUtils;
@@ -24,30 +25,49 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 
 import com.example.check.wisdom.util.exception.BadRequestException;
 
-@CrossOrigin(origins = "*")
-@RequestMapping ("/customers") // Base path for all customer related endpoints
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+
+// @CrossOrigin(origins = "*")
+@RequestMapping ("customers") // Base path for all customer related endpoints
 @RestController
 @Slf4j
 public class CustomerController {
  
   
   private final CustomerService customerService;
+  private final Map<String, Timer> timerMap;
+
+  private static final String GET_ALL_CUSTOMERS = "getAllCustomers";
+  private static final String ADD_CUSTOMER = "addCustomer";
+  private static final String GET_CUSTOMER = "getCustomer";
+  private static final String UPDATE_CUSTOMER = "updateCustomer";
   
-  public CustomerController(CustomerService customerService) {
+  public CustomerController(CustomerService customerService, MeterRegistry registry) {
     super();
     this.customerService = customerService;
 
     log.info("CustomerController initialized with customerService");
+    timerMap = new java.util.HashMap<>();
+    // Registering timers for different operations
+    timerMap.put(GET_ALL_CUSTOMERS, registry.timer(GET_ALL_CUSTOMERS));
+    timerMap.put(ADD_CUSTOMER, registry.timer(ADD_CUSTOMER));
+    timerMap.put(GET_CUSTOMER, registry.timer(GET_CUSTOMER));   
+    timerMap.put(UPDATE_CUSTOMER, registry.timer(UPDATE_CUSTOMER));
+  
   }
 
-  @GetMapping ("/customer")
-  public List<Customer> findCustomerByEmail(@RequestParam(required=false) String email) {
+  
+  @GetMapping ("/customerEmail") 
+  public List<Customer> getCustomerByEmail(@RequestParam(required=false) String email) {
     log.info("Email from path:", email);
+    Timer.Sample timer = Timer.start();
     List<Customer> customers = new ArrayList<>();
     try{
     if (StringUtils.hasLength(email)) {
       customers = this.customerService.findCustomerByEmail(email);
-      //return customers;
+      timerMap.get(GET_CUSTOMER).record (()-> timer.stop(timerMap.get(GET_CUSTOMER)));
+      return customers;
     } else {
       log.warn("Email id not found in Customer Controller sending all Customers selected by me through {}");
       //getAllCustomers(); 
