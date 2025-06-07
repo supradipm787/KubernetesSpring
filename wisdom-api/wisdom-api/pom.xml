@@ -83,13 +83,23 @@
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
 						</path>
-					</annotationProcessorPaths>
+					</annotationProcessorPaths>		
+
 				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<!-- Adding tag for image Start-->
+					<!-- <image>
+						<name>docker.io/library/wisdom-api:0.0.1-SNAPSHOT</name>
+						<builder>paketobuildpacks/builder-jammy-base:0.4.417</builder>
+					</image> -->
+					<!-- <image>
+						<builder>paketobuildpacks/builder:base</builder>
+					</image> -->
+					<!-- Adding tag for image End-->
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>
