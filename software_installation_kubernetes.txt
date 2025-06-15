@@ -51,7 +51,7 @@ spec:
       targetPort: 5432
       nodePort: 30007
 
-psql -h localhost -p 6543 -U localuser localdb
+psql -h localhost -p 5432 -U localuser localdb
 
 
 

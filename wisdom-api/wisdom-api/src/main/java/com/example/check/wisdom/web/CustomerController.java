@@ -12,21 +12,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-//import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.check.wisdom.data.entity.Customer;
-//import com.example.check.wisdom.data.repository.CustomerRepository;
 import com.example.check.wisdom.service.CustomerService;
-
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.CrossOrigin;
-
 import com.example.check.wisdom.util.exception.BadRequestException;
 
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import lombok.extern.slf4j.Slf4j;
 
 // @CrossOrigin(origins = "*")
 @RequestMapping ("customers") // Base path for all customer related endpoints

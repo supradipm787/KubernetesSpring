@@ -22,9 +22,8 @@
         //"SPRING_DATASOURCE_PASSWORD": "p@ssw0Rd!"
         "DB_USERNAME": "localuser",
         "DB_PASSWORD": "p@ssw0Rd!",
-        "DB_PORT": "6543",
-        //"DB_PORT": "30007",
-        "DB_HOST": "localhost",
+        "DB_PORT": "5432",
+        "DB_HOST": "localdb-rw.postgres.svc.cluster.local",
         "DB_NAME": "localdb"
         //"SPRING_PROFILES_ACTIVE": "dev"
       }
